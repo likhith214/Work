@@ -1,27 +1,20 @@
-# Work
+import requests
+from bs4 import BeautifulSoup
 
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+# The URL of the webpage you want to scrape
+url = 'URL_OF_THE_WEBPAGE'
 
-# Initialize WebDriver
-driver = webdriver.Chrome()
+# Send a GET request to fetch the raw HTML content
+response = requests.get(url)
 
-# Open the target URL
-driver.get('https://example.com')  # Replace with the actual URL
+# Parse the HTML content
+soup = BeautifulSoup(response.content, 'html.parser')
 
-# Wait until the button is clickable and then click it
-button = WebDriverWait(driver, 10).until(
-    EC.element_to_be_clickable((By.CSS_SELECTOR, ".q-button.q-cta-button"))
-)
-button.click()
+# Find the dropdown menu by its class
+dropdown_menu = soup.find('ul', class_='dropdown-menu')
 
-# Optionally, handle the redirect or interact with the new page
-WebDriverWait(driver, 10).until(EC.url_changes(driver.current_url))
+# Extract the options into a list
+options = [li.get_text(strip=True) for li in dropdown_menu.find_all('li')]
 
-# Perform actions on the new page
-# Example: new_element = driver.find_element(By.XPATH, "//your-new-element-xpath")
-
-# Close the driver when done
-driver.quit()
+# Print the extracted options
+print(options)
