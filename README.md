@@ -1,24 +1,20 @@
-from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
-html = """
-<form id="exampleForm">
-    <ul>
-        <li>Option 1</li>
-        <li>Option 2</li>
-        <li>Option 3</li>
-    </ul>
-</form>
-"""
+# Initialize the Chrome driver
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
-soup = BeautifulSoup(html, 'html.parser')
+# Open the web page
+driver.get('URL_OF_YOUR_PAGE')
 
-# Find the form by its ID
-form = soup.find('form', {'id': 'exampleForm'})
+# Find the input field and set its value
+input_element = driver.find_element(By.ID, 'form_input_custom_dropdown_model-package')
+input_element.clear()
+input_element.send_keys('Paquete A Chasis Cabina')
 
-# Find all li tags within the form
-options = form.find_all('li')
+# Perform any additional actions (e.g., submitting the form)
 
-# Extract the text from each li tag
-option_texts = [option.get_text() for option in options]
-
-print(option_texts)
+# Close the browser
+driver.quit()
