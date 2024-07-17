@@ -1,20 +1,24 @@
-import requests
 from bs4 import BeautifulSoup
 
-# The URL of the webpage you want to scrape
-url = 'URL_OF_THE_WEBPAGE'
+html = """
+<form id="exampleForm">
+    <ul>
+        <li>Option 1</li>
+        <li>Option 2</li>
+        <li>Option 3</li>
+    </ul>
+</form>
+"""
 
-# Send a GET request to fetch the raw HTML content
-response = requests.get(url)
+soup = BeautifulSoup(html, 'html.parser')
 
-# Parse the HTML content
-soup = BeautifulSoup(response.content, 'html.parser')
+# Find the form by its ID
+form = soup.find('form', {'id': 'exampleForm'})
 
-# Find the dropdown menu by its class
-dropdown_menu = soup.find('ul', class_='dropdown-menu')
+# Find all li tags within the form
+options = form.find_all('li')
 
-# Extract the options into a list
-options = [li.get_text(strip=True) for li in dropdown_menu.find_all('li')]
+# Extract the text from each li tag
+option_texts = [option.get_text() for option in options]
 
-# Print the extracted options
-print(options)
+print(option_texts)
